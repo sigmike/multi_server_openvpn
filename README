@@ -1,0 +1,18 @@
+multi_server_openvpn helps you create a VPN with multiple servers connected to each other.
+
+Requirements on each server:
+* Debian Lenny
+* Ruby
+* OpenVPN
+
+How it works :
+
+Login as root on the first server and run:
+  wget http://github.com/piglop/multi_server_openvpn/raw/init -O - | ruby
+
+The init script will:
+* create a directory /etc/openvpn/multi_server
+* create some scripts to manage the vpn
+* install init scripts in /etc/init.d/multi_server_openvpn and run update-rc.d
+* print a notice
+
