@@ -1,0 +1,12 @@
+---
+s1.example.com:
+  ip: 10.123.0.1
+  keys: s1
+  name: s1
+
+s2.example.com:
+  ip: 10.123.0.2
+  keys: s2
+  name: s2
+
+

@@ -1,2 +1,5 @@
-#!/usr/bin/env ruby
+#!/bin/sh
 
+. ./vars
+./build-ca --batch
+./build-dh --batch

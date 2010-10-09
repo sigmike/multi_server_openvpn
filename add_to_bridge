@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if=$1
+brctl setfd vpn 1
+brctl addif vpn $if
+ifconfig $if up
+ip neigh flush dev vpn 2>/dev/null
+
