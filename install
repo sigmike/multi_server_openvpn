@@ -20,7 +20,6 @@ ip = server['ip']
 
 server_conf = File.read("server.conf")
 server_conf += "
-ifconfig #{ip} 255.255.255.0
 cert #{key}_server.crt
 key #{key}_server.key
 "
@@ -55,6 +54,7 @@ puts "Add this to /etc/network/interfaces:
 auto vpn
 iface vpn inet static
   pre-up brctl addbr vpn
+  pre-up brctl stp vpn on
   post-down brctl delbr vpn
   address #{ip}
   netmask 255.255.255.0
