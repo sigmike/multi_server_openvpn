@@ -7,5 +7,10 @@ if [ -z "$hostname" ]; then
   exit 1
 fi
 
-rsync -va /etc/openvpn/multi_server $hostname:/etc/openvpn/
+if [ "$hostname" == `hostname` ]; then
+  echo "$hostname is local host!"
+  exit 1
+fi
+
+rsync -va --delete /etc/openvpn/multi_server $hostname:/etc/openvpn/
 ssh $hostname /etc/openvpn/multi_server/install
