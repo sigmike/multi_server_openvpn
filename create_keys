@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+  echo "usage: $0 <hostname>"
+  exit 1
+fi
+
+. ./vars
+./build-key-server --batch $1_server
+./build-key --batch $1_client

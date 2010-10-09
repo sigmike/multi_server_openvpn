@@ -1,0 +1,11 @@
+#!/bin/sh
+
+hostname=$1
+
+if [ -z "$hostname" ]; then
+  echo "usage: $0 <hostname>"
+  exit 1
+fi
+
+rsync -va /etc/openvpn/multi_server $hostname:/etc/openvpn/
+ssh $hostname /etc/openvpn/multi_server/install

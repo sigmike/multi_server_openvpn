@@ -1,0 +1,61 @@
+#!/usr/bin/env ruby
+
+Dir.chdir File.dirname(__FILE__)
+
+require 'yaml'
+require 'socket'
+require 'fileutils'
+
+servers = YAML.load(File.read('servers.yml'))
+
+hostname = Socket.gethostname
+server = servers[hostname]
+
+unless server
+  raise "Local server (#{hostname.inspect}) not found in servers.yml"
+end
+
+key = server['keys']
+ip = server['ip']
+
+server_conf = File.read("server.conf")
+server_conf += "
+ifconfig #{ip} 255.255.255.0
+cert #{key}_server.crt
+key #{key}_server.key
+"
+File.open('../server.conf', 'w') { |f| f.write server_conf }
+
+client_conf = File.read("client.conf")
+client_conf += "
+cert #{key}_client.crt
+key #{key}_client.key
+"
+
+servers.each do |name, values|
+  next if name == hostname
+  File.open("../client_#{values['name']}.conf", 'w') do |f|
+    f.write client_conf
+    f.puts "remote #{name} 1194"
+  end
+end
+
+"
+  ca.crt
+  dh1024.pem
+  #{key}_server.crt
+  #{key}_server.key
+  #{key}_client.crt
+  #{key}_client.key
+".split.each do |file|
+  FileUtils.cp File.join('keys', file), File.join('../', file)
+end
+
+puts "Add this to /etc/network/interfaces:
+auto vpn
+iface vpn inet static
+  pre-up brctl addbr vpn
+  post-down brctl delbr vpn
+  address #{ip}
+  netmask 255.255.255.0
+"
