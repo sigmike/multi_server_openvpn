@@ -1,8 +1,11 @@
 #!/bin/sh
 
-if=$1
+cost=$1
+if=$2
+
 brctl setfd vpn 1
 brctl addif vpn $if
+brctl setpathcost vpn $if $cost
 ifconfig $if up
 ip neigh flush dev vpn 2>/dev/null
 
