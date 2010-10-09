@@ -7,12 +7,39 @@ Requirements on each server:
 
 How it works :
 
-Login as root on the first server and run:
-  wget http://github.com/piglop/multi_server_openvpn/raw/init -O - | ruby
+* login as root on the first server
 
-The init script will:
-* create a directory /etc/openvpn/multi_server
-* create some scripts to manage the vpn
-* install init scripts in /etc/init.d/multi_server_openvpn and run update-rc.d
-* print a notice
+* cd /etc/openvpn
+
+* install the software:
+    git clone http://github.com/piglop/multi_server_openvpn
+
+* cd multi_server_openvpn
+
+* copy vars.sample and edit it:
+    cp vars.sample vars
+    nano vars
+
+* copy servers.yml.sample and edit it:
+    cp servers.yml.sample servers.yml
+    nano servers.yml
+
+* create keys (one for each "name" of servers.yml):
+  for i in s1 s2; do ./create_keys $i; done
+
+* check the server.conf and client.conf
+
+* create OpenVPN config files :
+  ./install
+
+* edit /etc/network/interfaces as told.
+
+* start the bridge:
+    ifup vpn
+
+* restart OpenVPN
+    /etc/init.d/openvpn restart
+
+* deploy on other servers:
+    ./deploy s2.example.com
 
